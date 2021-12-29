@@ -15,26 +15,6 @@ chai.use(chaiHttp);
 
 describe('Functional Tests', function () {
 
-  /*
-  * ----[EXAMPLE TEST]----
-  * Each test should completely test the response of the API end-point including response status code!
-  */
-  it('#example Test GET /api/books', function (done) {
-    chai.request(server)
-      .get('/api/books')
-      .end(function (err, res) {
-        assert.equal(res.status, 200);
-        assert.isArray(res.body, 'response should be an array');
-        assert.property(res.body[0], 'commentcount', 'Books in array should contain commentcount');
-        assert.property(res.body[0], 'title', 'Books in array should contain title');
-        assert.property(res.body[0], '_id', 'Books in array should contain _id');
-        done();
-      });
-  });
-  /*
-  * ----[END of EXAMPLE TEST]----
-  */
-
   describe('Routing tests', function () {
     // You can send a POST request to /api/books with title as part of the form data to add a book.
     // The returned response will be an object with the title and a unique _id as keys. 
@@ -59,7 +39,7 @@ describe('Functional Tests', function () {
           .send({})
           .end(function (err, res) {
             assert.equal(res.status, 200);
-            assert.equal(res.text, 'missing required field: title');
+            assert.equal(res.text, 'missing required field title');
             done();
           });
       });
@@ -152,7 +132,7 @@ describe('Functional Tests', function () {
           .send({})
           .end(function (err, res) {
             assert.equal(res.status, 200);
-            assert.equal(res.text, 'missing required field: comment');
+            assert.equal(res.text, 'missing required field comment');
             done();
           });
       });
@@ -202,6 +182,24 @@ describe('Functional Tests', function () {
       });
 
     });
-  });
 
+    // You can send a DELETE request to /api/books to delete all books in the database.
+    // The returned response will be the string 'complete delete successful if successful.
+    describe('DELETE /api/books => delete all books', function () {
+      it('Test DELETE /api/books', function (done) {
+        chai.request(server)
+          .delete('/api/books')
+          .end(function (err, res) {
+            assert.equal(res.status, 200);
+            assert.equal(res.text, 'complete delete successful');
+            // Check Get all books
+            chai.request(server).get('/api/books').end(function (err, res) {
+              assert.equal(res.status, 200);
+              assert.equal(res.body.length, 0);
+              done();
+            });
+          });
+      });
+    });
+  });
 });
