@@ -34,7 +34,7 @@ app.use(function(req, res, next) {
     .type('text')
     .send('Not Found');
 });
-
+if (require.main === module) {
 //Start our server and tests!
 const PORT = process.env.PORT || 3000
 app.listen(PORT, function () {
@@ -52,5 +52,5 @@ app.listen(PORT, function () {
     }, 1500);
   }
 });
-
+}
 module.exports = app; // for testing
