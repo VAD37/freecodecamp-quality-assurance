@@ -36,7 +36,7 @@ app.use(function(req, res, next) {
 });
 
 const portNum = process.env.PORT || 3000;
-
+if (require.main === module) {
 // Start our server and tests!
 app.listen(portNum, () => {
   console.log(`Listening on port ${portNum}`);
@@ -52,5 +52,5 @@ app.listen(portNum, () => {
     }, 1500);
   }
 });
-
+}
 module.exports = app; // For testing
